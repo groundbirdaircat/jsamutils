@@ -214,44 +214,68 @@ const color = (function colorLogModule(){
 // WAIT TIMEOUT //
 //////////////////
 
-function wait(ms, fn){
-    var timeout, state = 0,
-    states = [
+const wait = (function waitWrapper(){
+
+    function wait(ms, fn){
+        var [timeout, state, fn] = 
+            verifyWait(ms, fn, waitFnExecuted)
+
+        function clear(){
+            state = verifyClear(state, timeout)
+        }
+        function waitFnExecuted(){
+            state = 3
+            fn()
+        }
+        return { clear }
+    }
+
+////////// private //////////
+
+    const states = [
         'waiting', 
         'failed init', 
         'cleared', 
         'executed'
     ]
-    if (!fn && typeof ms == 'function') {
-        fn = ms
-        ms = 0
-    }
-    else if (typeof fn != 'function') {
-        state = 1
-        color.err(
-            `'wait'`,
-            `requires 'function' but got ` +
-            `'${typeof fn}'`,
-        )
+
+    function verifyWait(ms, fn, waitFnEx){
+        var timeout, state = 0
+        if (!fn && typeof ms == 'function') {
+            fn = ms
+            ms = 0
+        }
+        else if (typeof fn != 'function') {
+            state = 1
+            color.err(
+                `'wait'`,
+                `requires 'function' but got ` +
+                `'${typeof fn}'`,
+            )
+        }
+        if (!state) timeout = setTimeout(waitFnEx, ms)
+        return [timeout, state, fn]
     }
 
-    function clear(){
-        if (state) return color.err(
-            `'wait'`, 
-            `nothing to clear ` +
-            `(${(state > 1 ? 
-                'already ' : '') + states[state]})`
-        )
-        state = 2
-        clearTimeout(timeout)
+    function verifyClear(state, timeout){
+        if (state) {
+            color.err(
+                `'wait'`, 
+                `nothing to clear ` +
+                `(${(state > 1 ? 
+                    'already ' : '') + states[state]})`
+            )
+        }
+        else {
+            clearTimeout(timeout)
+            state = 2
+        }
+        return state
     }
-    function waitFnExecuted(){
-        state = 3
-        fn()
-    }
-    if (!state) timeout = setTimeout(waitFnExecuted, ms)
-    return { clear }
-}
+
+    return wait
+
+})()
 
 ////////////////////
 // ELEMENT THINGS //
