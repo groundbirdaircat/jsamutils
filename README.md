@@ -24,12 +24,12 @@ import { color, wait, rand } from './filepath/jsamutils.js'
 import * as utils from './filepath/jsamutils.js'
 ```
 Available imports:<br>
-`color`, `wait`,<br>
-`div`, `create`, `el`, <br>
-`rand`, `randFloor`, `randBool`,<br>
-`pxToVmax`, `pxToVmin`, `msToTime`,<br>
-`angle`, `distance`,<br>
-`noResizeTransition`
+[`color`](#color-log), [`wait`](#wait-timeout),<br>
+[`div`](#div), [`create`](#create), [`el`](#el), <br>
+[`rand`](#rand), [`randFloor`](#randfloor), [`randBool`](#randbool),<br>
+[`pxToVmax`](#pxtovmax), [`pxToVmin`](#pxtovmin), [`msToTime`](#mstotime),<br>
+[`angle`](#angle), [`distance`](#distance),<br>
+[`noResizeTransition`](#noresizetransition)
 
 # Color Log
 `color.log` adds some style to your browser console logs.<br><br>
@@ -192,7 +192,7 @@ distance(0, 0, 1, 1) // 1.4142135623730951
 ```
 
 # noResizeTransition
-`noResizeTransition` is a module that prevents elements from css transitions during a window resize.<br><br>
+`noResizeTransition` is a module that prevents elements from animating css transitions during a window resize.<br><br>
 It works by listening for the `resize` event, and then adds a css class named `notransition` onto all elements that are added to the module.<br><br>
 It removes the class from all added elements 250ms after the window has stopped resizing.<br><br>
 For the module to work, you must add the following class to your stylesheet:
