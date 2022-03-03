@@ -365,18 +365,17 @@ function randFloor(min, max){
 function randBool(){
     return Boolean(randFloor(2))
 }
-
 ////////// private //////////
 
 function setRandMinMax(min, max){
-    if (!min && !max) [min, max] = [0, 1]
-    if (typeof max == 'undefined') {
+    if (min == undefined && 
+        max == undefined) [min, max] = [0, 1]
+    else if (max == undefined) {
         max = 0
     }
     if (max < min) [min, max] = [max, min]
     return [min, max]
 }
-
 ////////////////
 // CONVERTERS //
 ////////////////
