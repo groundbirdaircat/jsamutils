@@ -376,6 +376,7 @@ function setRandMinMax(min, max){
     if (max < min) [min, max] = [max, min]
     return [min, max]
 }
+
 ////////////////
 // CONVERTERS //
 ////////////////
