@@ -6,6 +6,7 @@ export {
     pxToVmax, pxToVmin, msToTime,
     angle, distance, 
     noResizeTransition,
+    onDOMLoad
 }
 
 ///////////////
@@ -557,3 +558,39 @@ const noResizeTransition = (function noResizeModule(){
     return api
     
 })()
+
+/////////////////
+// ON DOM LOAD //
+/////////////////
+
+function onDOMLoad(...fns){
+    if (!fns.length) return color.err(
+        'onDOMLoad',
+        'requires at least one function'
+    )
+    fns.forEach(function verifyLoadFns(fn){
+        if (typeof fn != 'function') color.err(
+            'onDOMLoad',
+            'requires a function but received a ' +
+            typeof fn
+        )
+    })
+    if (document.readyState == 'complete') {
+        wait(executeInitFns)
+    }
+    else {
+        addEventListener(
+            'DOMContentLoaded', 
+            executeInitFns
+        )
+    }
+    function executeInitFns(){
+        fns.forEach(function execInitFn(fn){
+            if (typeof fn == 'function') fn()
+        })
+        removeEventListener(
+            'DOMContentLoaded', 
+            executeInitFns
+        )
+    }
+}
