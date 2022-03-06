@@ -220,8 +220,9 @@ const wait = (function waitWrapper(){
         var [timeout, state, fn] = 
             verifyWait(ms, fn, waitFnExecuted)
 
-        function clear(){
-            state = verifyClear(state, timeout)
+        function clear(silent){
+            if (silent) state = silentClear(state, timeout)
+            else state = verifyClear(state, timeout)
         }
         function waitFnExecuted(){
             state = 3
@@ -270,6 +271,12 @@ const wait = (function waitWrapper(){
             clearTimeout(timeout)
             state = 2
         }
+        return state
+    }
+
+    function silentClear(state, timeout){
+        if (!state) state = 2
+        clearTimeout(timeout)
         return state
     }
 
