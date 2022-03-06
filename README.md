@@ -13,6 +13,7 @@ Front end utilities that I commonly use, packaged as an ESModule.
 * [Converters](#converters) (3)<br>
 * [Calculations](#calculations) (2)<br>
 * [noResizeTransition](#noresizetransition)<br>
+* [onDOMLoad](#ondomload)<br>
 
 # Get Started
 You can import this module just like any other ESModule.
@@ -29,7 +30,8 @@ Available imports:<br>
 [`rand`](#rand), [`randFloor`](#randfloor), [`randBool`](#randbool),<br>
 [`pxToVmax`](#pxtovmax), [`pxToVmin`](#pxtovmin), [`msToTime`](#mstotime),<br>
 [`angle`](#angle), [`distance`](#distance),<br>
-[`noResizeTransition`](#noresizetransition)
+[`noResizeTransition`](#noresizetransition),<br>
+[`onDOMLoad`](#ondomload)<br>
 
 # Color Log
 `color.log` adds some style to your browser console logs.<br><br>
@@ -92,6 +94,13 @@ wait(101, timeout.clear)
 // ... 100ms passes
 // log: function executed
 // error: can't clear, function already executed
+```
+If you don't want `clear` to report errors, you can pass any truthy value as a parameter.
+```javascript
+var timeout = wait(100, ()=>color.log('function executed'))
+timeout.clear() // timeout clears
+timeout.clear(true) // nothing happens
+timeout.clear(1) // also nothing
 ```
 
 # Element Things
@@ -219,3 +228,16 @@ noResizeTransition.add(document.body)
 noResizeTransition.remove(element)
 noResizeTransition.inspect() // [body]
 ```
+
+# onDOMLoad
+`onDOMLoad` is a function that accepts an unlimited amount of functions as parameters.<br><br>
+When the window detects the `DOMContentLoaded` event, it will execute all passed functions.
+```javascript
+onDOMLoad(
+    ()=> color.log('DOM Loaded')
+)
+// ... DOM loads
+// log: DOM Loaded
+```
+If the DOM is already loaded, `onDOMLoad` will immediately place the passed functions on the event loop.<br><br>
+This gives the engine a chance to finish initializing all variables and functions in your code before your functions execute.
